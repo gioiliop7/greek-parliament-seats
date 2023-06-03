@@ -1,52 +1,56 @@
 function apliAnalogiki(percentages) {
-    const validParties = percentages.filter((percentage) => percentage >= 3);
-    const totalValidPercentages = validParties.reduce((a, b) => a + b, 0);
-    const seatDistribution = [];
-    const threshold = 3;
-    const totalSeats = 300;
-  
-    validParties.forEach((percentage) => {
-      const seats = Math.floor((percentage / totalValidPercentages) * totalSeats);
-      seatDistribution.push(seats);
-    });
-  
-    const remainingSeats = totalSeats - seatDistribution.reduce((a, b) => a + b, 0);
-    const remainingParties = percentages.length - validParties.length;
-    const sumPercentageForOthers = 100 - validParties.reduce((a, b) => a + b, 0);
-  
-    if (remainingSeats > 0 && remainingParties > 0) {
-      const remainingPercentage = sumPercentageForOthers - totalValidPercentages;
-      const seatsPerParty = Math.floor((remainingPercentage / 100) * totalSeats);
-      let extraSeats = remainingSeats - seatsPerParty * remainingParties;
-  
-      for (let i = 0; i < remainingParties; i++) {
+  const validParties = percentages.filter((percentage) => percentage >= 3);
+  const totalValidPercentages = validParties.reduce((a, b) => a + b, 0);
+  const seatDistribution = [];
+  const threshold = 3;
+  const totalSeats = 300;
+
+  validParties.forEach((percentage) => {
+    const seats = Math.floor((percentage / totalValidPercentages) * totalSeats);
+    seatDistribution.push(seats);
+  });
+
+  const remainingSeats = totalSeats - seatDistribution.reduce((a, b) => a + b, 0);
+  const remainingParties = percentages.length - validParties.length;
+  const sumPercentageForOthers = 100 - validParties.reduce((a, b) => a + b, 0);
+
+  if (remainingSeats > 0 && remainingParties > 0) {
+    const remainingPercentage = sumPercentageForOthers - totalValidPercentages;
+    const seatsPerParty = Math.floor((remainingPercentage / 100) * totalSeats);
+    let extraSeats = remainingSeats - seatsPerParty * remainingParties;
+
+    for (let i = 0; i < remainingParties; i++) {
+      if (percentages[i] > threshold) {
+        seatDistribution.push(0);
+      } else {
         const seats = seatsPerParty + (extraSeats > 0 ? 1 : 0);
         seatDistribution.push(seats);
         extraSeats--;
       }
     }
-  
-    const seatSum = seatDistribution.reduce((a, b) => a + b, 0);
-    const seatsToAdd = totalSeats - seatSum;
-  
-    // Distribute remaining seats to parties with the highest fractional parts
-    if (seatsToAdd > 0) {
-      const fractionalParts = validParties.map((percentage, index) => {
-        const seats = seatDistribution[index];
-        const fractionalPart = percentage / totalValidPercentages - seats / totalSeats;
-        return { index, fractionalPart };
-      });
-  
-      fractionalParts.sort((a, b) => b.fractionalPart - a.fractionalPart);
-  
-      for (let i = 0; i < seatsToAdd; i++) {
-        const index = fractionalParts[i % fractionalParts.length].index;
-        seatDistribution[index]++;
-      }
-    }
-  
-    return seatDistribution;
   }
+
+  const seatSum = seatDistribution.reduce((a, b) => a + b, 0);
+  const seatsToAdd = totalSeats - seatSum;
+
+  // Distribute remaining seats to parties with the highest fractional parts
+  if (seatsToAdd > 0) {
+    const fractionalParts = validParties.map((percentage, index) => {
+      const seats = seatDistribution[index];
+      const fractionalPart = percentage / totalValidPercentages - seats / totalSeats;
+      return { index, fractionalPart };
+    });
+
+    fractionalParts.sort((a, b) => b.fractionalPart - a.fractionalPart);
+
+    for (let i = 0; i < seatsToAdd; i++) {
+      const index = fractionalParts[i % fractionalParts.length].index;
+      seatDistribution[index]++;
+    }
+  }
+
+  return seatDistribution;
+}
 
   
 function enisximeniAnalogiki(percentages) {
@@ -57,10 +61,12 @@ function enisximeniAnalogiki(percentages) {
   const allocatedSeats = [];
 
   // Calculate seats for proportional allocation
+  const eligibleParties = percentages.filter((percentage) => percentage >= threshold);
   const proportionalSeats = totalSeats - 50; // Remaining seats after allocating 50 for the first party
+  const totalEligibleVotes = eligibleParties.reduce((sum, percentage) => sum + percentage, 0);
   for (let i = 0; i < percentages.length; i++) {
     if (percentages[i] >= threshold) {
-      const seats = Math.round((percentages[i] / totalVotes) * proportionalSeats);
+      const seats = Math.round((percentages[i] / totalEligibleVotes) * proportionalSeats);
       allocatedSeats.push(seats);
     } else {
       allocatedSeats.push(0);
