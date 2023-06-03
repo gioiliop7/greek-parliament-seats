@@ -1,6 +1,6 @@
 {
   "name": "greek-parliament-seats",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Count how many seats take a party in greek elections",
   "main": "index.js",
   "repository": "https://github.com/gioiliop7/greek-parliament-seats",
