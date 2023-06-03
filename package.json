@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "Count how many seats take a party in greek elections",
   "main": "index.js",
+  "repository": "https://github.com/gioiliop7/greek-parliament-seats",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
