@@ -1,0 +1,11 @@
+{
+  "name": "greek-parliament-seats",
+  "version": "1.0.4",
+  "description": "Count how many seats take a party in greek elections",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Giorgos Iliopoulos",
+  "license": "ISC"
+}
